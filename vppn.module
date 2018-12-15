@@ -27,6 +27,11 @@ function vppn_help($route_name, RouteMatchInterface $route_match) {
  * Implements hook_form_FORM_ID_alter().
  */
 function vppn_form_node_page_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  // Make sure it's a valid type.
+  if (!\Drupal::service('vppn.handler')->checkIfContentTypeEnabled($form)) {
+    // Not a VPPN form.
+    return;
+  }
   $form['vppn'] = array(
     '#type' => 'details',
     '#title' => t('View access'),
@@ -66,6 +71,6 @@ function vppn_form_node_page_form_alter(&$form, \Drupal\Core\Form\FormStateInter
   $form['actions']['submit']['#submit'][] = 'vppn_node_form_submit';
 }
 
-function vppn_node_form_submit($form, $form_state){
-  dpm($form);
+function vppn_node_form_submit($form, \Drupal\Core\Form\FormStateInterface $form_state){
+  //@todo salvare aggiornamenti dati
 }

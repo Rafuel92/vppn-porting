@@ -26,4 +26,15 @@ class vppnHandler {
     return [];
   }
 
+  public function checkIfContentTypeEnabled($form){
+    if(!\Drupal::currentUser()->hasPermission('use vppn')){
+      return FALSE;
+    }
+    /** @var \Drupal\node\Entity\NodeType $nodeType */
+    $nodeType = \Drupal::routeMatch()->getParameters()->get('node_type');
+    $nodeType = $nodeType->get('type');
+    $config = \Drupal::config('vppn.vppnconfig');
+    return in_array($nodeType,$config,TRUE);
+  }
+
 }
