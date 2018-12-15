@@ -50,6 +50,10 @@ class vppnHandler {
 
   public function cleanEntriesByEntityId($id){
     //pulisce tutte le tuple relative alla tabella
+    $query = \Drupal::database()->delete('vppn');
+    $query->condition('nid', $id);
+    $count = $query->execute();
+    return $count > 0 ? TRUE : FALSE;
   }
 
   public function insertRoleEntry($roleName,$value){
