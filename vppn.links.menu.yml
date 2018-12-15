@@ -1,0 +1,7 @@
+vppn.vppn_config_form:
+  title: 'Permissions per Node'
+  route_name: vppn.vppn_config_form
+  description: 'Configure VPPN Permissions'
+  parent: user.admin_index
+  weight: 99
+

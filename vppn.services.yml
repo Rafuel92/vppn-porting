@@ -1,0 +1,4 @@
+services:
+  vppn.handler:
+    class: Drupal\vppn\vppnHandler
+    arguments: ['@entity_type.manager']
