@@ -1,0 +1,14 @@
+{
+  "name": "drupal/vppn",
+  "type": "drupal-module",
+  "description": "View Permissions Per Node",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0+",
+  "homepage": "https://www.drupal.org/project/vppn",
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/vppn",
+    "source": "http://cgit.drupalcode.org/vppn"
+  },
+  "require": { }
+}

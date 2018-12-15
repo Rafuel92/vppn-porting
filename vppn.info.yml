@@ -1,0 +1,6 @@
+name: 'vppn'
+type: module
+description: 'View Permissions Per Node'
+core: 8.x
+package: 'Custom'
+configure: vppn.vppn_config_form
