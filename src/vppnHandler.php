@@ -26,18 +26,34 @@ class vppnHandler {
     return [];
   }
 
-  public function checkIfContentTypeEnabled($form){
+  public function checkIfContentTypeEnabled(){
     if(!\Drupal::currentUser()->hasPermission('use vppn')){
       return FALSE;
     }
     /** @var \Drupal\node\Entity\NodeType $nodeType */
-    $nodeType = \Drupal::routeMatch()->getParameters()->get('node_type');
-    $nodeType = $nodeType->get('type');
-    $config = \Drupal::config('vppn.vppnconfig')->get('vppn_node_list');
+    $routeName = \Drupal::routeMatch()->getRouteName();
+    if($routeName == 'node.add') {
+      $nodeType = \Drupal::routeMatch()->getParameters()->get('node_type');
+      $nodeType = $nodeType->get('type');
+      $config = \Drupal::config('vppn.vppnconfig')->get('vppn_node_list');
+    } elseif ($routeName == 'entity.node.edit_form'){
+      /** @var NodeInterface $nodeType */
+      $nodeType = \Drupal::routeMatch()->getParameters()->get('node');
+      $nodeType = $nodeType->getType();
+      $config = \Drupal::config('vppn.vppnconfig')->get('vppn_node_list');
+    }
     if(is_null($config)){
       return FALSE;
     }
     return in_array($nodeType,$config,TRUE);
+  }
+
+  public function cleanEntriesByEntityId($id){
+    //pulisce tutte le tuple relative alla tabella
+  }
+
+  public function insertRoleEntry($roleName,$value){
+    //aggiorna
   }
 
 }

@@ -5,6 +5,7 @@
  * Contains vppn.module.
  */
 
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Routing\RouteMatchInterface;
 
 /**
@@ -24,11 +25,11 @@ function vppn_help($route_name, RouteMatchInterface $route_match) {
 }
 
 /**
- * Implements hook_form_FORM_ID_alter().
+ * Implements hook_form_alter().
  */
-function vppn_form_node_page_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+function vppn_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
   // Make sure it's a valid type.
-  if (!\Drupal::service('vppn.handler')->checkIfContentTypeEnabled($form)) {
+  if (!\Drupal::service('vppn.handler')->checkIfContentTypeEnabled()) {
     // Not a VPPN form.
     return;
   }
@@ -71,25 +72,72 @@ function vppn_form_node_page_form_alter(&$form, \Drupal\Core\Form\FormStateInter
   $form['actions']['submit']['#submit'][] = 'vppn_node_form_submit';
 }
 
-
-
-
-
-
-/**
- * Implements hook_form_FORM_ID_alter().
- */
-function vppn_form_node_page_edit_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
-  return FALSE;
+function vppn_node_form_submit($form, \Drupal\Core\Form\FormStateInterface $form_state){
+  $vals = $form_state->getValues();
+  if(isset($vals['vppn_roles'])){
+    $roles = $vals['vppn_roles'];
+    if($roles){
+      foreach($roles as $roleName => $value){
+        \Drupal::service('vppn.handler')->cleanEntriesByEntityId($form_state->getFormObject()->getEntity()->id());
+        \Drupal::service('vppn.handler')->insertRoleEntry($roleName,$value);
+      }
+    }
+  }
 }
 
+/**
+ * Implements hook_node_access().
+ */
+function vppn_node_access(\Drupal\node\NodeInterface $node, $op, \Drupal\Core\Session\AccountInterface $account) {
+
+  // Only concerned with viewing.
+  if ($op != 'view') {
+
+    // Ignore if any other op.
+    return AccessResult::neutral();
+  }
+
+  // Make sure there's a node id.
+  if (empty($node->nid)) {
+
+    // Should never happen but ignore if no nid.
+    return AccessResult::neutral();
+  }
 
 
+  $configEnabled = \Drupal::config('vppn.vppnconfig')->get('vppn_node_list');
 
-function vppn_node_form_submit($form, \Drupal\Core\Form\FormStateInterface $form_state){
-  //@todo salvare aggiornamenti datiù
-  $a=1;
+  // Check if it's a valid VPPN content type.
+  if (empty($node->getType()) || !in_array($node->getType(),$configEnabled,TRUE)) {
 
+    // Not a VPPN node type, we don't care.
+    return AccessResult::neutral();
+  }
+
+  // Get the records for this node.
+  $records = \Drupal::database()->select('vppn')
+    ->fields('vppn', array('rid'))
+    ->condition('nid', $node->id())
+    ->execute();
+
+  // Check that there is a record for this node.
+  if (!$records->rowCount()) {
+
+    // No record.
+    return AccessResult::neutral();
+  }
+
+  // Get the roles that can view this node.
+  $allowed_roles = array_flip($records->fetchCol());
+
+  // Make sure the user has one of the allowed roles.
+  return count(array_intersect_key($allowed_roles, $account->roles)) ?
+
+    // User has access, great success.
+    AccessResult::allowed() :
+
+    // Permissions defined and not enabled, deny.
+    AccessResult::forbidden();
 }
 
 
