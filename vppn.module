@@ -77,9 +77,12 @@ function vppn_node_form_submit($form, \Drupal\Core\Form\FormStateInterface $form
   if(isset($vals['vppn_roles'])){
     $roles = $vals['vppn_roles'];
     if($roles){
-      foreach($roles as $roleName => $value){
-        \Drupal::service('vppn.handler')->cleanEntriesByEntityId($form_state->getFormObject()->getEntity()->id());
-        \Drupal::service('vppn.handler')->insertRoleEntry($roleName,$value);
+      $nid= $form_state->getFormObject()->getEntity()->id();
+      \Drupal::service('vppn.handler')->cleanEntriesByEntityId($nid);
+      foreach($roles as $rid => $rid_selected){
+        if( $rid === $rid_selected ) {
+          \Drupal::service('vppn.handler')->insertRoleEntry($nid, $rid);
+        }
       }
     }
   }
