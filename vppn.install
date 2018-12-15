@@ -22,7 +22,7 @@ function vppn_schema() {
       ),
       'rid' => array(
         'description' => 'The role id that has the view permission.',
-        'type' => 'int',
+        'type' => 'string',
         'unsigned' => TRUE,
         'not null' => TRUE,
       ),
