@@ -23,7 +23,6 @@ class vppnHandler {
   }
 
   public function getDefaultsForNode($form){
-    dpm($form);
     return [];
   }
 
