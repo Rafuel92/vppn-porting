@@ -71,6 +71,25 @@ function vppn_form_node_page_form_alter(&$form, \Drupal\Core\Form\FormStateInter
   $form['actions']['submit']['#submit'][] = 'vppn_node_form_submit';
 }
 
-function vppn_node_form_submit($form, \Drupal\Core\Form\FormStateInterface $form_state){
-  //@todo salvare aggiornamenti dati
+
+
+
+
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function vppn_form_node_page_edit_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  return FALSE;
 }
+
+
+
+
+function vppn_node_form_submit($form, \Drupal\Core\Form\FormStateInterface $form_state){
+  //@todo salvare aggiornamenti datiù
+  $a=1;
+
+}
+
+

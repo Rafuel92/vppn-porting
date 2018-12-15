@@ -33,7 +33,10 @@ class vppnHandler {
     /** @var \Drupal\node\Entity\NodeType $nodeType */
     $nodeType = \Drupal::routeMatch()->getParameters()->get('node_type');
     $nodeType = $nodeType->get('type');
-    $config = \Drupal::config('vppn.vppnconfig');
+    $config = \Drupal::config('vppn.vppnconfig')->get('vppn_node_list');
+    if(is_null($config)){
+      return FALSE;
+    }
     return in_array($nodeType,$config,TRUE);
   }
 
