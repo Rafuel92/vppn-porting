@@ -1,0 +1,11 @@
+
+vppn.vppn_config_form:
+  path: '/admin/config/vppn/vppnconfig'
+  defaults:
+    _form: '\Drupal\vppn\Form\VppnConfigForm'
+    _title: 'VppnConfigForm'
+  requirements:
+    _permission: 'access administration pages'
+  options:
+    _admin_route: TRUE
+
