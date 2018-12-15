@@ -22,9 +22,10 @@ function vppn_schema() {
       ),
       'rid' => array(
         'description' => 'The role id that has the view permission.',
-        'type' => 'int',
-        'unsigned' => TRUE,
+        'type' => 'varchar_ascii',
+        'length' => DRUPAL_EXTENSION_NAME_MAX_LENGTH,
         'not null' => TRUE,
+        'default' => '',
       ),
     ),
     'primary key' => array('nid', 'rid'),
