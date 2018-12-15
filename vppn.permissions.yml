@@ -1,0 +1,3 @@
+use vppn:
+  title: 'Use vppn module'
+  description: 'Allow use of vppn module'
